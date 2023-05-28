@@ -38,7 +38,10 @@ def processVideo(inputPath,model):
     outputPath=tempfile.mkdtemp()#创建输出视频的临时文件夹的路径
 
     #输出格式为XVID格式的avi文件
-    fourcc = cv2.VideoWriter_fourcc('X','V','I','D')#视频编码：h264,只能保存为avi格式,本地运行时不能在浏览器播放
+    #如果需要使用h264编码或者需要保存为其他格式，可能需要下载openh264-1.8.0
+    #下载地址：https://github.com/cisco/openh264/releases/tag/v1.8.0
+    #下载完成后将dll文件放在当前文件夹内
+    fourcc = cv2.VideoWriter_fourcc('X','V','I','D')
     video_save_path = os.path.join(outputPath,"output.avi")#创建输出视频路径
 
     output_viedo.open(video_save_path , fourcc, fps, size, True)
