@@ -1,6 +1,5 @@
 from ultralytics import YOLO
 import cv2
-import cvzone
 import numpy as np
 import tempfile
 from pathlib import Path
@@ -139,6 +138,7 @@ def processVideo(inputPath, model):
 
 if __name__ == "__main__":
     detect_class = 0
+    
     with gr.Blocks() as demo:
         with gr.Tab("Tracking"):
             gr.Markdown(

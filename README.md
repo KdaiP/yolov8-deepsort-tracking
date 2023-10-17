@@ -41,7 +41,7 @@ model = "yolov8n.pt"
 
 ## 运行(非WebUI)
 
-运行app.py
+运行main.py
 运行完成后，终端会显示输出视频所在的路径。
 
 ## WebUI界面的配置和运行
