@@ -97,7 +97,7 @@ def processVideo(inputPath, model):
         # 获取每一帧的目标检测推理结果
         results = model(frame, stream=True)
 
-        detections = []  # 存放bounding box结果
+        detections = np.empty((0, 4))  # 存放bounding box结果
         confarray = []  # 存放每个检测结果的置信度
 
         # 读取目标检测推理结果
@@ -110,11 +110,11 @@ def processVideo(inputPath, model):
                 cls = int(box.cls[0])  # 获取物体类别标签
 
                 if cls == detect_class:
-                    detections.append([x1, y1, x2, y2])
+                    detections = np.vstack((detections,np.array([x1,y1,x2,y2])))
                     confarray.append(conf)
 
         # 使用deepsort进行跟踪
-        resultsTracker = tracker.update(np.array(detections), confarray, frame)
+        resultsTracker = tracker.update(detections, confarray, frame)
         for x1, y1, x2, y2, Id in resultsTracker:
             x1, y1, x2, y2 = map(int, [x1, y1, x2, y2])
 
