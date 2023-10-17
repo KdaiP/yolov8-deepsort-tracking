@@ -1,8 +1,11 @@
+# requirements
+# Example: pip install -r requirements.txt
+
+# Base ---------------------------------------
 ultralytics
 opencv-python
-cvzone
 torch
 matplotlib
-filterpy
-scikit-image
-lap
+
+# WebUI ---------------------------------------
+# gradio

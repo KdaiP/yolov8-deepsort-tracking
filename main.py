@@ -1,26 +1,11 @@
 from ultralytics import YOLO
 import cv2
-import cvzone
 import numpy as np
 import tempfile
 from pathlib import Path
 import deep_sort.deep_sort.deep_sort as ds
 
-import gradio as gr
-
-# YoloV8官方模型，从左往右由小到大，第一次使用会自动下载
-model_list = ["yolov8n.pt", "yolov8s.pt", "yolov8m.pt", "yolov8l.pt", "yolov8x.pt"]
-
-def putTextWithBackground(
-    img,
-    text,
-    origin,
-    font=cv2.FONT_HERSHEY_SIMPLEX,
-    font_scale=1,
-    text_color=(255, 255, 255),
-    bg_color=(0, 0, 0),
-    thickness=1,
-):
+def putTextWithBackground(img, text, origin, font=cv2.FONT_HERSHEY_SIMPLEX, font_scale=1, text_color=(255, 255, 255), bg_color=(0, 0, 0), thickness=1):
     """绘制带有背景的文本。
 
     :param img: 输入图像。
@@ -42,30 +27,15 @@ def putTextWithBackground(
 
     # 在矩形上绘制文本
     text_origin = (origin[0], origin[1] - 5)  # 从左上角的位置减去5来留出一些边距
-    cv2.putText(
-        img,
-        text,
-        text_origin,
-        font,
-        font_scale,
-        text_color,
-        thickness,
-        lineType=cv2.LINE_AA,
-    )
-
+    cv2.putText(img, text, text_origin, font, font_scale, text_color, thickness, lineType=cv2.LINE_AA)
 
 # 视频处理
-def processVideo(inputPath, model):
+def processVideo(inputPath: str) -> Path:
     """处理视频，检测并跟踪行人。
 
     :param inputPath: 视频文件路径
     :return: 输出视频的路径
     """
-    tracker = ds.DeepSort(
-        "deep_sort/deep_sort/deep/checkpoint/ckpt.t7"
-    )  # 加载deepsort权重文件
-    model = YOLO(model)  # 加载YOLO模型文件
-
     # 读取视频文件
     cap = cv2.VideoCapture(inputPath)
     fps = cap.get(cv2.CAP_PROP_FPS)  # 获取视频的帧率
@@ -74,21 +44,16 @@ def processVideo(inputPath, model):
         int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)),
     )  # 获取视频的大小
     output_video = cv2.VideoWriter()  # 初始化视频写入
-    outputPath = tempfile.mkdtemp()  # 创建输出视频的临时文件夹的路径
 
     # 输出格式为XVID格式的avi文件
     # 如果需要使用h264编码或者需要保存为其他格式，可能需要下载openh264-1.8.0
     # 下载地址：https://github.com/cisco/openh264/releases/tag/v1.8.0
     # 下载完成后将dll文件放在当前文件夹内
-    output_type = "avi"
-    if output_type == "avi":
-        fourcc = cv2.VideoWriter_fourcc(*"XVID")
-        video_save_path = Path(outputPath) / "output.avi"  # 创建输出视频路径
-    if output_type == "mp4":  # 浏览器只支持播放h264编码的mp4视频文件
-        fourcc = cv2.VideoWriter_fourcc(*"h264")
-        video_save_path = Path(outputPath) / "output.mp4"
+    fourcc = cv2.VideoWriter_fourcc(*"XVID")
+    video_save_path = Path(outputPath) / "output.avi"  # 创建输出视频路径
 
-    output_video.open(video_save_path.as_posix(), fourcc, fps, size, True)
+    output_video.open(video_save_path.as_posix(), fourcc, fps, size, isColor=True)
+
     # 对每一帧图片进行读取和处理
     while True:
         success, frame = cap.read()
@@ -98,8 +63,8 @@ def processVideo(inputPath, model):
         # 获取每一帧的目标检测推理结果
         results = model(frame, stream=True)
 
-        detections = []  # 存放bounding box结果
-        confarray = []  # 存放每个检测结果的置信度
+        detections = [] # 存放bounding box结果
+        confarray = [] # 存放每个检测结果的置信度
 
         # 读取目标检测推理结果
         # 参考： https://docs.ultralytics.com/modes/predict/#working-with-results
@@ -121,43 +86,33 @@ def processVideo(inputPath, model):
 
             # 绘制bounding box
             cv2.rectangle(frame, (x1, y1), (x2, y2), (255, 0, 255), 3)
-            putTextWithBackground(
-                frame,
-                str(int(Id)),
-                (max(-10, x1), max(40, y1)),
-                font_scale=1.5,
-                text_color=(255, 255, 255),
-                bg_color=(255, 0, 255),
-            )
+            putTextWithBackground(frame, str(int(Id)), (max(-10, x1), max(40, y1)), font_scale=1.5, text_color=(255, 255, 255), bg_color=(255, 0, 255))
 
         output_video.write(frame)  # 将处理后的图像写入视频
     output_video.release()  # 释放
     cap.release()  # 释放
-    print(f"output dir is: {video_save_path.as_posix()}")
-    return video_save_path.as_posix(), video_save_path.as_posix()  # Gradio的视频控件实际读取的是文件路径
+    print(f'output dir is: {video_save_path}')
+    return video_save_path
 
 
 if __name__ == "__main__":
+    # 在这里填入视频文件路径
+    ######
+    input_video_path = "test.mp4"
+    ######
+
+    # 输出文件夹，默认为系统的临时文件夹路径
+    outputPath = tempfile.mkdtemp()  # 创建临时文件夹用于存储输出视频
+
+    # 加载yoloV8模型权重
+    model = YOLO("yolov8n.pt")
+
+    # 需要跟踪的物体类别，model.names返回模型所支持的所有物体类别
+    # yoloV8官方模型的第一个类别为'person'
     detect_class = 0
-    with gr.Blocks() as demo:
-        with gr.Tab("Tracking"):
-            gr.Markdown(
-                """
-                # YoloV8 + deepsort
-                基于opencv + YoloV8 + deepsort
-                """
-            )
-            with gr.Row():
-                with gr.Column():
-                    input_video = gr.Video(label="Input video")
-                    model = gr.Dropdown(model_list, value="yolov8n.pt", label="Model")
-                with gr.Column():
-                    output = gr.Video()
-                    output_path = gr.Textbox(label="Output path")
-            button = gr.Button("Process")
+    print(f"detecting {model.names[detect_class]}")
 
-        button.click(
-            processVideo, inputs=[input_video, model], outputs=[output, output_path]
-        )
+    # 加载deepsort模型权重
+    tracker = ds.DeepSort("deep_sort/deep_sort/deep/checkpoint/ckpt.t7")
 
-    demo.launch(server_port=6006)
+    processVideo(input_video_path)
