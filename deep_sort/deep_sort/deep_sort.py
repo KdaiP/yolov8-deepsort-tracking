@@ -24,8 +24,8 @@ class DeepSort(object):
         # 对于每个目标，返回到目前为止已观察到的任何样本的最近距离（欧式或余弦）。
         # 由距离度量方法构造一个 Tracker。
         # 第一个参数可选'cosine' or 'euclidean'
-        metric = NearestNeighborDistanceMetric("cosine", max_cosine_distance, nn_budget)
-        self.tracker = Tracker(metric, max_iou_distance=max_iou_distance, max_age=max_age, n_init=n_init)
+        self.metric = NearestNeighborDistanceMetric("cosine", max_cosine_distance, nn_budget)
+        self.tracker = Tracker(self.metric, max_iou_distance=max_iou_distance, max_age=max_age, n_init=n_init)
 
     def update(self, bbox_xywh, confidences, ori_img):
         self.height, self.width = ori_img.shape[:2]

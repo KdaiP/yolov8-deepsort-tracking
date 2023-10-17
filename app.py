@@ -137,8 +137,10 @@ def processVideo(inputPath, model):
 
 
 if __name__ == "__main__":
+    # 需要跟踪的物体类别
     detect_class = 0
-    
+
+    # Gradio参考文档：https://www.gradio.app/guides/blocks-and-event-listeners
     with gr.Blocks() as demo:
         with gr.Tab("Tracking"):
             gr.Markdown(

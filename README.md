@@ -1,17 +1,20 @@
 <div align="center">
 <h1> yolov8-deepsort-tracking </h1>
+
+[![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/KdaiP/yolov8-deepsort-tracking)
 </div>
 
 ![示例图片](https://github.com/KdaiP/yolov8-deepsort-tracking/blob/main/demo.png)
 
 opencv+yolov8+deepsort的行人检测与跟踪。当然，也可以识别车辆等其他类别。
 
-- 2023/10/17更新：简化代码，删除不必要的依赖
+2023/10/17更新：简化代码，删除不必要的依赖。解决webui上传视频不会清空traker ID的问题。
 
-- 2023/7/4更新：加入了一个基于Gradio的WebUI界面
+2023/7/4更新：加入了一个基于Gradio的WebUI界面
 
 ## 安装
 环境：Python>=3.8
+
 本项目需要pytorch，建议手动在[pytorch官网](https://pytorch.org/get-started/locally/)根据自己的平台和CUDA环境安装对应的版本。
 
 pytorch的详细安装教程可以参照[Conda Quickstart Guide for Ultralytics](https://docs.ultralytics.com/guides/conda-quickstart/)
@@ -47,6 +50,8 @@ model = "yolov8n.pt"
 ## WebUI界面的配置和运行
 
 **请先确保已经安装完成上面的依赖**
+
+demo: [Huggingface demo](https://huggingface.co/spaces/KdaiP/yolov8-deepsort-tracking)
 
 安装Gradio库：
 
