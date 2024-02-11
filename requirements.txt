@@ -8,4 +8,5 @@ torch
 matplotlib
 
 # WebUI ---------------------------------------
+# tqdm
 # gradio
