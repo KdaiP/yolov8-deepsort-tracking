@@ -10,6 +10,8 @@ opencv+yolov8+deepsort的行人检测与跟踪。当然，也可以识别车辆�
 
 # 更新历史
 
+2024/2/27：TODO：预计添加YoloV9+ByteTrack版本。pip版本的yoloV9安装遇到了一点问题，不过Ultralytics框架目前也在做YoloV9的适配，等更新了以后继续用Ultralytics框架吧。
+
 2024/2/11更新：清理代码，完善注释。WebUI新增识别目标选择、进度条显示、终止推理、示例等功能。
 
 2023/10/17更新：简化代码，删除不必要的依赖。解决webui上传视频不会清空tracker ID的问题。
