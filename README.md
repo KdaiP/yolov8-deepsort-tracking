@@ -10,7 +10,7 @@ opencv+yolov8+deepsort的行人检测与跟踪。当然，也可以识别车辆�
 
 # 更新历史
 
-2024/2/27：TODO：预计添加YoloV9+ByteTrack版本。pip版本的yoloV9安装遇到了一点问题，不过Ultralytics框架目前也在做YoloV9的适配，等更新了以后继续用Ultralytics框架吧。
+2024/3/5：YoloV9模型已添加至WebUI。
 
 2024/2/11更新：清理代码，完善注释。WebUI新增识别目标选择、进度条显示、终止推理、示例等功能。
 
@@ -52,7 +52,14 @@ input_path = "test.mp4"
 model = YOLO("yolov8n.pt")
 ```
 
-第一次使用会自动从官网下载模型，如果网速过慢，可以在[ultralytics的官方文档](https://docs.ultralytics.com/tasks/detect/)下载模型，然后将模型文件拷贝到程序所在目录下。
+其他支持的模型可以参照[ultralytics官方支持的模型列表](https://docs.ultralytics.com/models/)
+例如，如果想要使用YOLOv9模型：
+
+```python
+model = YOLO("yolov9c.pt")
+```
+
+第一次使用时，会自动从官网下载模型。如果网速过慢，可以在[ultralytics的官方文档](https://docs.ultralytics.com/tasks/detect/)下载模型，然后将模型文件拷贝到程序所在目录下。
 
 ## 运行(非WebUI)
 

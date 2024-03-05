@@ -182,8 +182,8 @@ def detect_and_track(input_path: str, output_path: str, detect_class: int, model
 
 if __name__ == "__main__":
     
-    # YoloV8官方模型列表，从左往右由小到大，第一次使用会自动下载
-    model_list = ["yolov8n.pt", "yolov8s.pt", "yolov8m.pt", "yolov8l.pt", "yolov8x.pt"]
+    # YoloV8、V9官方模型列表，从左往右由小到大，第一次使用会自动下载
+    model_list = ["yolov9c.pt", "yolov9e", "yolov8n.pt", "yolov8s.pt", "yolov8m.pt", "yolov8l.pt", "yolov8x.pt"]
     
     # 获取YoloV8模型可以检测的所有类别，默认调用model_list中第一个模型
     detect_classes = get_detectable_classes(model_list[0])
